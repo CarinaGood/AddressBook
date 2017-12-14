@@ -12,8 +12,14 @@ import java.util.function.ToLongFunction;
 public class AddressComperator implements java.util.Comparator<Address> {
 
     @Override
-    public int compare(Address o1, Address o2) {
-        return 0;
+    public int compare(Address a1, Address a2) {
+        int resultLastname = a1.getLastname().compareTo(a2.getLastname());
+        if (resultLastname == 0){
+            int resultFirstname = a1.getFirstname().compareTo(a2.getFirstname());
+            if (resultFirstname == 0) {
+                return a1.getRegistrationDate().compareTo(a2.getRegistrationDate());
+            }else return resultFirstname;
+        }else return resultLastname;
     }
 
     @Override

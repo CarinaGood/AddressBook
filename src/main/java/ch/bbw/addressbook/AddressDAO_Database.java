@@ -27,7 +27,7 @@ public class AddressDAO_Database implements AddressDAO {
 	private void init() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/db_addressbook","root","");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/address","root","");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
