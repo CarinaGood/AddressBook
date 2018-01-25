@@ -76,27 +76,37 @@ public class AddressDAO_Database implements AddressDAO {
 	 */
 //	@Override
 	public Address read(int id) {
-		// TODO: read, not implemented yet
-		return null;
+		Address address = null;
+		ResultSet entries = prepareStatement("SELECT * FROM address WHERE id=" + id + ";");
+		try {
+			address = new Address(
+                        entries.getInt("id"),
+                        entries.getString("firstname"),
+                        entries.getString("lastname"),
+                        entries.getString("phonenumber"),
+                        entries.getDate("registrationDate"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return address;
 	}
 	
 	/* (non-Javadoc)
 	 * @see ch.bbw.addressbook.AddressDAOInterface#readAll()
 	 */
 //	@Override
-	public List<Address> readAll() {
+	public List<Address> readAll(){
 		List<Address> list = new ArrayList<>();
+		ResultSet entries = prepareStatement("SELECT * FROM address");
 		try {
-			Statement stmt = connection.createStatement();
-			ResultSet entries = stmt.executeQuery("SELECT * FROM address");
 			while (entries.next()) {
 				list.add(new Address(
-						entries.getInt("id"), entries.getString("firstname"), 
-						entries.getString("lastname"), entries.getString("phonenumber"),
+						entries.getInt("id"),
+						entries.getString("firstname"),
+						entries.getString("lastname"),
+						entries.getString("phonenumber"),
 						entries.getDate("registrationDate")));
 			}
-			entries.close();
-			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +118,10 @@ public class AddressDAO_Database implements AddressDAO {
 	 */
 //	@Override
 	public void update(Address address) {
-		// TODO: update, not implemented yet
+		prepareStatement("UPDATE address SET firstname = " + address.getFirstname() + ","
+				+ "lastname = " + address.getLastname() + ","
+				+ "phnonenumber = " + address.getPhonenumber()
+				+ "WHERE id = " + address.getId() + ";");
 	}
 	
 	/* (non-Javadoc)
@@ -116,7 +129,21 @@ public class AddressDAO_Database implements AddressDAO {
 	 */
 //	@Override
 	public void delete(int id) {
-		// TODO: delete, not implemented yet
+		prepareStatement("DELETE FROM address" +
+				"WHERE id = " + id + ";");
+	}
+
+	private ResultSet prepareStatement(String sql){
+		try {
+			Statement stmt = connection.createStatement();
+			ResultSet entries = stmt.executeQuery(sql);
+			entries.close();
+			stmt.close();
+			return entries;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
